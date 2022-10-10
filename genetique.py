@@ -1,5 +1,5 @@
 from random import *
-
+import operator
 
 def cout(L):
     """ renvoi le cout de la solution L en dictionnaire """
@@ -35,13 +35,13 @@ def cout(L):
             m2 = OF[produit][machine+1] # machine suivante
             
             
-            e1 = L[m1]
-            e2 = L[m2]
+            e1 = L[m1-1]
+            e2 = L[m2-1]
             
             
             distance_produit += D[e1-1][e2-1]
             
-        distance_produit += D[0][OF[produit][0]] + D[-1][OF[produit][-1]]
+        distance_produit += D[0][OF[produit][0]] + D[OF[produit][-1]][-1]
             
         
         S += distance_produit * V[produit]
@@ -50,17 +50,25 @@ def cout(L):
     return S
 
 
-def Générer(MaxPopul,ind):
+def Générer(MaxPopul,n):
     """générer aléatoirement MaxPopul individus :
     Générer un ensemble de permutations aléatoires à partir d'une solution de base"""
-    L=[]
+    
+    L= []
     for i in range(MaxPopul):
-        m1 = randint(0,len(ind)-1)
-        m2 = randint(0,len(ind)-1)
+        D = [1,2,3,4,5,6,7,8,9]
+        ind = []
+        for j in range(n):
+            k = choice(D)
+            ind.append(k)
+            D.remove(k)
         
-        Ds = ind.copy()
-        Ds[m1], Ds[m2] = ind[m2], ind[m1]
-        L.append(Ds)
+        L.append(ind)
+            
+        
+                    
+    
+    
     return L    
 
     
@@ -87,8 +95,8 @@ def Sélection(NbSelect,popul):
     Methode de tournoi binaire"""
     TabSelect = []
     for i in range(NbSelect):
-        n1 = randint(1,len(popul))
-        n2 = randint(1,len(popul))
+        n1 = randint(1,len(popul)-1)
+        n2 = randint(1,len(popul)-1)
         if popul[n1] > popul[n2] :
             TabSelect.append(n1)
         else :
@@ -97,33 +105,104 @@ def Sélection(NbSelect,popul):
     return TabSelect
         
 
-def Croisement(PCrois,TabSelect,NbSelect,TabEnfant,NbEnfant):
+def Croisement(PCrois,NbSelect,TabSelect,popul,coupure):
     """/avec une probabilité Pcrois, croiser tout couple
     /d'individus d'indice dans TabSelect et retourner NbEnfant
-    /individus-enfants dans un tableau TabEnfant"""  
+    /individus-enfants dans un tableau TabEnfant
+    Croisement X1 sans répétitions """  
+    
+    Tabenfants = []
+    p = random()
+    if p <= PCrois :
+        for i in range(0,NbSelect,2):
+            parent1 = popul[TabSelect[i]]
+            parent2 = popul[TabSelect[i+1]]
+            enfant1=parent1[:coupure]
+            enfant2=parent2[:coupure]
+            for j in parent2:
+                if j not in enfant1:
+                    enfant1.append(j)
+            for k in parent1:
+                if k not in enfant2:
+                    enfant2.append(k)
+            Tabenfants.append(enfant1)
+            Tabenfants.append(enfant2)
+            
+        
     
     
-    pass
+    return Tabenfants
 
-def Mutation(PMut,TabEnfant,NbEnfant):
+def Mutation(PMut,TabEnfant):
     """/avec une faible probabilité Pmut, modifier aléatoirement
-/les enfants et retourner le résultat dans TabEnfant"""
-    pass
+    /les enfants et retourner le résultat dans TabEnfant
+    Permutation """
+    for i in range(len(TabEnfant)):
+        D = [0,1,2,3,4,5,6,7,8]
+        p = random()
+        if p < PMut :
+            n1 = choice(D)
+            D.remove(n1)
+            n2 = choice(D)
+            TabEnfant[i][n1],TabEnfant[i][n2] = TabEnfant[i][n2], TabEnfant[i][n1]
+        
+        
+    return TabEnfant
 
 
-def Remplacement(TabEnfant,Popul):
+def Remplacement(TabEnfant,Popul,MaxPopul):
     """/remplacer les individus de TabEnfant dans la population (en
     /préservant la meilleure solution !)
     /exemple : garder dans Popul « les MaxPopul meilleure individus »
     /parmi les(MaxPopul+NbEnfant)individus"""    
-    pass
+    newPopul = TabEnfant + Popul
+    TabPopul_value = []
+    cout = Evaluer(newPopul)
+    for i in range(len(newPopul)):
+        
+        TabPopul_value.append((newPopul[i],cout[i]))
+        
+    
+    
+    TabPopul_value.sort(key = operator.itemgetter(1))
+    
+    TabPopul = []
+    
+    for couple in TabPopul_value: 
+        TabPopul.append(couple[0])
+        
+    
+    return (TabPopul[:MaxPopul])
+    
 
 
 
-D = [4, 3, 7, 2, 1, 9, 8, 5, 6]
-Popul = Générer(100,D)
-COUT = Evaluer(Popul)
-S = Sélection(4,Popul)
-print(S)
-print(COUT)
+
+
+### Paramètres
+MaxPopul = 30
+n = 9
+NbSelect = 30
+PCrois = 1
+coupure = 4
+PMut = 0.4
+
+Popul = Générer(MaxPopul,n)
+Tabselect = Sélection(NbSelect,Popul)
+arret = False
+while n < 100 :
+    
+    Tabenfants = Croisement(PCrois,NbSelect,Tabselect,Popul,coupure)
+    
+    Tabenfants = Mutation(PMut,Tabenfants)
+    
+    newPopul = Remplacement(Tabenfants,Popul,MaxPopul)
+    
+    Popul = newPopul
+    
+    
+    n += 1
+
+print(newPopul)
+print(Evaluer(Popul))
 
