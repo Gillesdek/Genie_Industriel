@@ -83,10 +83,16 @@ def Evaluer(Popul):
 
 
 def Sélection(NbSelect,popul):
-    """/sélectionner NbSelect (nombre paire) d'individus et retourner  /les indices dans TabSelect"""
+    """/sélectionner NbSelect (nombre paire) d'individus et retourner  /les indices dans TabSelect
+    Methode de tournoi binaire"""
     TabSelect = []
     for i in range(NbSelect):
-        TabSelect.append(randint(1,len(popul)))
+        n1 = randint(1,len(popul))
+        n2 = randint(1,len(popul))
+        if popul[n1] > popul[n2] :
+            TabSelect.append(n1)
+        else :
+            TabSelect.append(n2)
     
     return TabSelect
         
@@ -94,7 +100,9 @@ def Sélection(NbSelect,popul):
 def Croisement(PCrois,TabSelect,NbSelect,TabEnfant,NbEnfant):
     """/avec une probabilité Pcrois, croiser tout couple
     /d'individus d'indice dans TabSelect et retourner NbEnfant
-    /individus-enfants dans un tableau TabEnfant"""    
+    /individus-enfants dans un tableau TabEnfant"""  
+    
+    
     pass
 
 def Mutation(PMut,TabEnfant,NbEnfant):
@@ -115,7 +123,7 @@ def Remplacement(TabEnfant,Popul):
 D = [4, 3, 7, 2, 1, 9, 8, 5, 6]
 Popul = Générer(100,D)
 COUT = Evaluer(Popul)
-S = Sélection(2,Popul)
+S = Sélection(4,Popul)
 print(S)
 print(COUT)
 
