@@ -4,7 +4,7 @@
 D = {1:4, 2:3, 3:7, 4:2, 5:1, 6:9, 7:8, 8:5, 9:6}    # clé  = machine, valeur = emplacement
 D0 = {1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9}
 
-
+#from Cout import cout
 # Calcul du cout avec le dictionnaire fourni en argument
 def cout(L):
     """ renvoi le cout de la solution L en dictionnaire """
@@ -78,12 +78,12 @@ def meilleur_voisin(init, Taboue=[]) :
                 
     return best_vois
 
-def MiseAJour(Taboue, nouvelle_valeur) :
+def MiseAJour(Taboue, nouvelle_valeur, taille_Taboue = 10) :
     """Cette fonction met à jour la liste des taboue, en suprimant la valeur la plus ancienne et en ajoutant la plus récente
     La première valeur de la liste est la plus ancienne, la dernière est la plus récente
-    On choisit de stocker 10 éléments dans la liste Taboue"""
+    On choisit de stocker par défaut 10 éléments dans la liste Taboue"""
     
-    if len(Taboue) < 7 :
+    if len(Taboue) < 15 :
         Taboue.append(nouvelle_valeur)
         
     else :
@@ -94,9 +94,9 @@ def MiseAJour(Taboue, nouvelle_valeur) :
     return Taboue
      
 
-def methode_taboue(x0, Nb_max_iter, Nb_max_iter_stable) :
+def methode_taboue(x0, Nb_max_iter, Nb_max_iter_stable, taille_taboue) :
     """ Fonction qui implémente la méthode du taboue
-    Les arguments sont une solution de départ, le nombre maximum d'itération et le nombre maximum d'itérations stables """
+    Les arguments sont une solution de départ, le nombre maximum d'itération et le nombre maximum d'itérations stables et la taille de la liste taboue"""
     
     xm = x0                  # xm contiendra la meilleure solution trouvée
     fm = cout(x0)            # fm contiendra le cout de la meilleure solution trouvée
@@ -108,7 +108,7 @@ def methode_taboue(x0, Nb_max_iter, Nb_max_iter_stable) :
         x1 = meilleur_voisin(x0, T)         # Recherche du meilleur voisin de x0
         Nb_iteration += 1
         
-        T = MiseAJour(T, x1)                # Mise à jour de la liste Taboue, avec ajout du nouvel élément x1
+        T = MiseAJour(T, x1, taille_taboue)                # Mise à jour de la liste Taboue, avec ajout du nouvel élément x1
         
         if cout(x1) < cout(x0) :
             xm = x1                         # Mise à jour de la meilleure solution
@@ -121,8 +121,43 @@ def methode_taboue(x0, Nb_max_iter, Nb_max_iter_stable) :
     
     return xm, fm
 
-print(cout(D))
-print(methode_taboue(D, 5000, 1000))
-#print(meilleur_voisin(D))
-#print(cout(meilleur_voisin(D)))
 
+def test_nb_iter(D, iter_min, iter_max, pas, Nb_iter_stable, taille_taboue) :
+    import matplotlib.pyplot as plt
+    x = list(range(iter_min, iter_max, pas))
+    y=[]
+    for Nb_iter in range(iter_min, iter_max, pas):
+        y.append(methode_taboue(D, Nb_iter, Nb_iter_stable,taille_taboue)[1])
+    
+    plt.plot(x, y)
+    plt.show() # affiche la figure à l'écran    
+    
+    
+def test_taille_taboue(D, Nb_iter, Nb_iter_stable) :
+    import matplotlib.pyplot as plt
+    x = list(range(5, 15))
+    y=[]
+    for taille in range(5, 15):
+        y.append(methode_taboue(D, Nb_iter, Nb_iter_stable, taille)[1])
+    
+    plt.plot(x, y)
+    plt.show() # affiche la figure à l'écran    
+
+    
+print(cout(D))
+print(methode_taboue(D, 100, 100,8))
+#print(test_nb_iter(D, 100, 3000, 50, 10, 7))
+print(test_taille_taboue(D, 100, 50))
+'''
+m = nombre de machines
+e = nombre d'emplacement
+p = nombre de produits
+t = taille de la liste taboue
+
+Complexité de la méthode :
+- fonction cout : O(p*m)
+- fonction meilleur voisin : O(t*m^2)
+- fonction MiseAJour : O(t)
+- fonction methode_Taboue : O(Nb_max_iter * Nb_max_iter_stable *t^2 * m^3 * p)
+
+'''
