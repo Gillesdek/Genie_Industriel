@@ -140,7 +140,7 @@ def Remplacement(TabEnfant,Popul,MaxPopul,D,OF,V):
 
 
 
-def genetique(Popul,MaxPopul,n,NbSelect,PCrois,PMut,D,OF,V):
+def genetique(Popul,MaxPopul,n,NbSelect,PCrois,PMut,D,OF,V,afficher = False):
     
     Tabselect = Sélection(NbSelect,Popul)
     arret = False
@@ -159,9 +159,10 @@ def genetique(Popul,MaxPopul,n,NbSelect,PCrois,PMut,D,OF,V):
         
         
         i += 1
+    if afficher :
+        print("Populutation finale : ", Popul)
+        print("cout des 3 premiers : ", Evaluer(Popul[:3],D,OF,V)) 
     
-    print("Populutation finale : ", Popul)
-    print("cout des 3 premiers : ", Evaluer(Popul[:3],D,OF,V))    
     return Popul,Evaluer(Popul[:3],D,OF,V)
 
 
