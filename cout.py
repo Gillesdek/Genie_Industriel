@@ -61,6 +61,7 @@ def cout(OF,D,V,Solution):
     
     return S
 
+
 def valeur_list(F,D,V,perm):
     
     distance_machines = []  # liste qui contient la suite des distance entre les machine pour chaque produit (liste de listes)
@@ -89,10 +90,7 @@ def valeur_list(F,D,V,perm):
 
 
 
-Solution = [7,5,1,2,9,6,8,4,3] # indice = num_machine
-                               # Valeur = emplacement
 
 
 
 
-print(valeur_list(OF,D,V,Solution))
