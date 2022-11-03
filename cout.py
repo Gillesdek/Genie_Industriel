@@ -30,7 +30,7 @@ def cout(OF,D,V,Solution):
     S = 0
     for p in range(len(OF)):
         distance_produit = 0
-        for j in range(1,9):
+        for j in range(1,len(D)):
             try :
                 m1 = OF[p].index(j) + 1 # numéro de la j-ème machine 
                 
@@ -65,9 +65,9 @@ def cout(OF,D,V,Solution):
 def valeur_list(F,D,V,perm):
     
     distance_machines = []  # liste qui contient la suite des distance entre les machine pour chaque produit (liste de listes)
-    for i in range(0,7): # i produit (0 produits)
+    for i in range(0,len(V)): # i produit (0 produits)
         distance_machines_i = []
-        for j in range(1,9): # emplacements dans la fabrication ! (première machine utilisée, deuxième,...)
+        for j in range(1,len(D)): # emplacements dans la fabrication ! (première machine utilisée, deuxième,...)
             if j == 1: # si on est à la première machine dans l'ordre de fabrication
                 z = F[i].index(j) # on récupère la place de la première machine dans la fabrication pour le produit i
                 distance_machines_i.append(D[0][perm[z]]) # on prend la distance entre l'entrée et la première machine
@@ -75,7 +75,7 @@ def valeur_list(F,D,V,perm):
                 distance_machines_i.append(D[perm[z]][perm[y]])
             elif j+1 not in F[i]: # si il n'y a pas de machine suivante on va vers la sortie
                 x = F[i].index(j) # on récupère la place de la dernière machine dans la fabrication pour le produit i
-                distance_machines_i.append(D[perm[x]][10]) # on prend la distance entre la dernière machine et la sortie
+                distance_machines_i.append(D[perm[x]][len(D)-1]) # on prend la distance entre la dernière machine et la sortie
                 break #on sort
             else:
                 a = F[i].index(j) 
@@ -84,7 +84,7 @@ def valeur_list(F,D,V,perm):
 
         distance_machines.append(distance_machines_i)
     somme = 0
-    for t in range (0,7):
+    for t in range (0,len(V)):
         somme += sum(distance_machines[t]) * V[t]
     return somme
 
