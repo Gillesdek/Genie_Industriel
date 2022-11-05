@@ -126,7 +126,7 @@ def graphique(x, y, representation, Nb_iter, Nb_iter_stable, taille):
     
     plt.figure()
     plt.plot(x, y)
-    plt.title(f"Cout en fonction du {representation}\navec les paramètres Nb_iter = {Nb_iter}, Nb_iter = {Nb_iter_stable} et taille = {taille}")
+    plt.title(f"Cout en fonction du {representation}\navec les paramètres Nb_iter = {Nb_iter}, Nb_iter_stable = {Nb_iter_stable} et taille = {taille}")
     plt.xlabel(representation)
     plt.ylabel("Coût")
     plt.show()               # affiche la figure à l'écran    
