@@ -46,17 +46,22 @@ def Evaluer(Popul,D,OF,V):
 
 
 
-def Sélection(NbSelect,popul):
+def Sélection(NbSelect,popul,OF,D,V):
     """/sélectionner NbSelect (nombre paire) d'individus et retourner  /les indices dans TabSelect
     Methode de tournoi binaire"""
+            
     TabSelect = []
+    List_index = list(range(len(popul)))
     for i in range(NbSelect):
-        n1 = randint(1,len(popul)-1)
-        n2 = randint(1,len(popul)-1)
-        if popul[n1] > popul[n2] :
+        n1 = choice(List_index)
+        n2 = choice(List_index)
+        if valeur_list(OF,D,V,popul[n1]) > valeur_list(OF,D,V,popul[n2]) :
             TabSelect.append(n1)
+            List_index.remove(n1)
         else :
             TabSelect.append(n2)
+            List_index.remove(n2)
+        
     
     return TabSelect
         
@@ -91,12 +96,12 @@ def Croisement(PCrois,NbSelect,TabSelect,popul):
     
     return Tabenfants
 
-def Mutation(PMut,TabEnfant):
+def Mutation(PMut,TabEnfant,n):
     """/avec une faible probabilité Pmut, modifier aléatoirement
     /les enfants et retourner le résultat dans TabEnfant
     Permutation """
     for i in range(len(TabEnfant)):
-        D = [0,1,2,3,4,5,6,7,8]
+        D = list(range(n))
         p = random()
         if p < PMut :
             n1 = choice(D)
@@ -140,30 +145,35 @@ def Remplacement(TabEnfant,Popul,MaxPopul,D,OF,V):
 
 
 
-def genetique(Popul,MaxPopul,n,NbSelect,PCrois,PMut,D,OF,V,afficher = False):
+def genetique(Popul,MaxPopul,n,NbSelect,PCrois,PMut,Nbiter,D,OF,V,afficher = False):
     
-    Tabselect = Sélection(NbSelect,Popul)
+    
+    
     arret = False
     i = 0
-    while i < 100 :
+    L = []
+    while i < Nbiter :
         
+        
+        Tabselect = Sélection(NbSelect,Popul,OF,D,V)
         
         
         Tabenfants = Croisement(PCrois,NbSelect,Tabselect,Popul)
         
-        Tabenfants = Mutation(PMut,Tabenfants)
+        Tabenfants = Mutation(PMut,Tabenfants,n)
         
         newPopul = Remplacement(Tabenfants,Popul,MaxPopul,D,OF,V)
         
         Popul = newPopul
         
+        L.append(Evaluer(Popul[0:1],D,OF,V))
         
         i += 1
     if afficher :
         print("Populutation finale : ", Popul)
         print("cout des 3 premiers : ", Evaluer(Popul[:3],D,OF,V)) 
     
-    return Popul,Evaluer(Popul[:3],D,OF,V)
+    return Popul,Evaluer(Popul[:3],D,OF,V),L
 
 
 
