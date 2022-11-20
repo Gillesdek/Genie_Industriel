@@ -63,3 +63,6 @@ with open("V.csv") as V_file:
             V2.append(int(line[0]))
         
         count += 1
+        
+        
+

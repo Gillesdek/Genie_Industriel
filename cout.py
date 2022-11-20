@@ -1,28 +1,4 @@
-D = [
-[0, 9, 4, 9, 9, 4, 15, 4, 11, 9, 12],
-[7, 0, 6, 11, 14, 5, 9, 12, 7, 7, 8],
-[4, 13, 0, 9, 9, 14, 15, 12, 5, 14, 8],
-[7, 5, 8, 0, 4, 15, 12, 5, 5, 7, 8],
-[11, 8, 7, 13, 0, 11, 10, 11, 6, 5, 6],
-[13, 4, 6, 15, 10, 0, 4, 10, 9, 7, 8],
-[9, 4, 10, 15, 5, 13, 0, 14, 7, 15, 8],
-[11, 7, 7, 10, 13, 15, 10, 0, 12, 11, 4],
-[9, 6, 10, 10, 11, 10, 7, 7, 0, 5, 14],
-[10, 10, 11, 9, 7, 9, 5, 7, 8, 0, 10],
-[10, 9, 9, 15, 8, 6, 7, 9, 10, 10, 0]
-]
-
-OF =[
-[2,1, 6, 3, 7, 5, 4, 8],
-[6, 4, 5, 1, 8, 2, 7, 3],
-[7, 0, 6, 4, 2, 3, 5, 1],
-[6, 5, 3, 1, 4, 7, 2, 8],
-[0, 2, 1, 5, 0, 3, 4, 0],
-[1, 3, 2, 5, 4, 7, 6, 0],
-[6, 0, 4, 5, 1, 2, 3, 0]
-]
-
-V = [4982, 2185, 2209, 2083, 4286, 4654, 3925]
+from data import D1,V1,OF1
 
 def cout(OF,D,V,Solution):
     
@@ -32,11 +8,11 @@ def cout(OF,D,V,Solution):
         distance_produit = 0
         for j in range(1,len(D)):
             try :
-                m1 = OF[p].index(j) + 1 # numéro de la j-ème machine 
+                m1 = OF[p].index(j) + 1 # numéro de la j-ème machine dans l'odre de formation
                 
                 print("machine",j,m1)
             
-                e1 = Solution[m1-1]  #emplacement de la j-ème machine
+                e1 = Solution[m1-1]  #emplacement de la j-ème machine dans 
                 
                 print("emplacement",j,e1)
                 
@@ -93,4 +69,6 @@ def valeur_list(F,D,V,perm):
 
 
 
-
+##Test
+#print(cout(OF1,D1,V1,[7, 5, 1, 2, 9, 6, 8, 4, 3])) # Ne marche pas mais on se sait pas pourquoi
+#print(valeur_list(OF1,D1,V1,[7, 5, 1, 2, 9, 6, 8, 4, 3])) # Marche !
