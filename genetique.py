@@ -2,8 +2,6 @@ from random import *
 import operator
 from cout import cout,valeur_list
 from data import D1,D2,OF1,OF2,V1,V2
-import csv
-
 
 
 def Générer(MaxPopul,n,D,OF,V):
@@ -242,38 +240,46 @@ def genetique(Popul,MaxPopul,n,NbSelect,PCrois,PMut,Nbiter,D,OF,V,afficher = Fal
     
     Sorties :
     - Popul = la population finale
-    - Cout = le cout des 3 premiers
-    - L = La liste des cout du premier de la population à chaque itération
+    - Cout = le cout des 3 premiers de la population finale
+    - L = La liste des couts du premier de la population à chaque itération
     
     """
     
     
     arret = False
     i = 0
-    L = [] # Liste des coût pour une iteration
+    L = [] 
     while i < Nbiter :
         
-        
+        # 1- Selection des parents
         Tabselect = Sélection(NbSelect,Popul,OF,D,V)
         
+        
+        # 2- Croisement
         if doublons == False :
             Tabenfants = Croisement_sdb(PCrois,NbSelect,Tabselect,Popul)
         else:
             Tabenfants = Croisement(PCrois,NbSelect,Tabselect,Popul)
             
-        
+        # 3- Mutation
         Tabenfants = Mutation(PMut,Tabenfants,n)
         
+        # 4- Remplacement
         newPopul = Remplacement(Tabenfants,Popul,MaxPopul,D,OF,V)
-        
         Popul = newPopul
         
+        
+        # Ajout du coût de la solution pour l'itération courante
         L.append(Evaluer(Popul[0:1],D,OF,V))
         
         i += 1
         
-        Cout = Evaluer(Popul[:3],D,OF,V)
+    
+    # Stockage des cout des 3 premiers de la population
+    Cout = Evaluer(Popul[:3],D,OF,V)
+    
     if afficher :
+        # Affichage des résultats
         print("Les 3 premières solutions sont : ", Popul[:3])
         print("leur coût respectif : ", Cout) 
     
